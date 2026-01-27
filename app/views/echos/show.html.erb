@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @echo %>
+
+<div>
+  <%= link_to "Edit this echo", edit_echo_path(@echo) %> |
+  <%= link_to "Back to echos", echos_path %>
+
+  <%= button_to "Destroy this echo", @echo, method: :delete %>
+</div>

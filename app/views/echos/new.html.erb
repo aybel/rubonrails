@@ -1,0 +1,11 @@
+<% content_for :title, "New echo" %>
+
+<h1>New echo</h1>
+
+<%= render "form", echo: @echo %>
+
+<br>
+
+<div>
+  <%= link_to "Back to echos", echos_path %>
+</div>

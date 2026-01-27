@@ -1,0 +1,12 @@
+<% content_for :title, "Editing echo" %>
+
+<h1>Editing echo</h1>
+
+<%= render "form", echo: @echo %>
+
+<br>
+
+<div>
+  <%= link_to "Show this echo", @echo %> |
+  <%= link_to "Back to echos", echos_path %>
+</div>

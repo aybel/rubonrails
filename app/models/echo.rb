@@ -1,0 +1,2 @@
+class Echo < ApplicationRecord
+end

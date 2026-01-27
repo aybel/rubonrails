@@ -1,0 +1,22 @@
+<%= form_with(model: echo) do |form| %>
+  <% if echo.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(echo.errors.count, "error") %> prohibited this echo from being saved:</h2>
+
+      <ul>
+        <% echo.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :message, style: "display: block" %>
+    <%= form.textarea :message %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

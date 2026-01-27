@@ -1,0 +1,21 @@
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO public /*application='Rubonrails'*/[0m
+  [1m[35m (1715.7ms)[0m  [1m[35mCREATE DATABASE "rubonrails_development" ENCODING = 'unicode' /*application='Rubonrails'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO public /*application='Rubonrails'*/[0m
+  [1m[35m (38.2ms)[0m  [1m[35mCREATE DATABASE "rubonrails_test" ENCODING = 'unicode' /*application='Rubonrails'*/[0m
+  [1m[35m (17.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY) /*application='Rubonrails'*/[0m
+  [1m[35m (2.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Rubonrails'*/[0m
+  [1m[35m (30.8ms)[0m  [1m[34mSELECT pg_try_advisory_lock(5953011334677038100) /*application='Rubonrails'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Rubonrails'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Rubonrails'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2026-01-27 00:59:33.884772', '2026-01-27 00:59:33.884774') RETURNING "key" /*application='Rubonrails'*/[0m
+Migrating to CreateEchos (20260127005928)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='Rubonrails'*/[0m
+  [1m[35m (3.7ms)[0m  [1m[35mCREATE TABLE "echos" ("id" bigserial primary key, "message" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Rubonrails'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260127005928') RETURNING "version" /*application='Rubonrails'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='Rubonrails'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(5953011334677038100) /*application='Rubonrails'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Rubonrails'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO public /*application='Rubonrails'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO "$user", public /*application='Rubonrails'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO public /*application='Rubonrails'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO "$user", public /*application='Rubonrails'*/[0m

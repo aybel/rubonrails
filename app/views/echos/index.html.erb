@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Echos" %>
+
+<h1>Echos</h1>
+
+<div id="echos">
+  <% @echos.each do |echo| %>
+    <%= render echo %>
+    <p>
+      <%= link_to "Show this echo", echo %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New echo", new_echo_path %>
