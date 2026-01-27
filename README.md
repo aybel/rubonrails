@@ -1,24 +1,51 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# rubonrails
 
-Things you may want to cover:
+Proyecto Ruby on Rails 7.1.6 con Docker y PostgreSQL
 
-* Ruby version
+## Requisitos
+- Docker
+- Docker Compose
 
-* System dependencies
+## Instalación y uso
+1. Clona el repositorio:
+	```
+	git clone https://github.com/aybel/rubonrails.git
+	cd rubonrails
+	```
+2. Levanta los servicios:
+	```
+	docker-compose up --build
+	```
+3. Crea la base de datos:
+	```
+	docker-compose run --rm web bin/rails db:create
+	```
+4. Accede a la app en [http://localhost:3000](http://localhost:3000)
 
-* Configuration
+## Configuración
+Las variables de entorno principales están en `docker-compose.yml`.
 
-* Database creation
+## Estructura
+- Ruby version: 3.2.2
+- Rails version: 7.1.6
+- Base de datos: PostgreSQL
 
-* Database initialization
+## Comandos útiles
+- Migraciones:
+  ```
+  docker-compose run --rm web bin/rails db:migrate
+  ```
+- Consola Rails:
+  ```
+  docker-compose run --rm web bin/rails console
+  ```
 
-* How to run the test suite
+## Test
+Para crear la base de datos de test:
+```
+docker-compose run --rm web bin/rails db:create RAILS_ENV=test
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Despliegue
+Configura las variables de entorno y la base de datos en producción según tus necesidades.
