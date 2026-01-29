@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Format Ruby with RuboCop (Docker)",
+      "type": "shell",
+      "command": "docker exec rubonrails-web-1 rubocop -A /rails/$("${relativeFile}" -replace '\\','/')",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },{
+     "label": "ERB formatter",
+    "type": "shell",
+    "command": "ext=$(echo ${file})  && if [ ${ext##*.} == erb ]; then htmlbeautifier ${file} ${file}; else echo 'Not an ERB file'; fi",
+    "presentation": {
+        "reveal": "never",
+        "panel": "new",
+        "echo": false
+       },
+    "group": {
+    "kind": "build",
+    "isDefault": true
+     }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+<%= render 'shared/titlebar', titulo: 'Nuevo Proveedor'%>
+<%= render partial: 'shared/breadcrumb', locals: { breadcrumbs: [
+  { label: 'Inicio', url: root_path },
+  { label: 'Administración', url: root_path },
+  { label: 'Proveedores', url: suppliers_path },
+  { label: 'Nuevo Proveedor' }
+] }
+%>
+<%= render partial: 'shared/crud_buttons', locals: { url_new: suppliers_path, name: 'Guardar' } %>
+
+<%= form_with model: @supplier, html: { class: 'needs-validation' } do |form| %>
+  <div class="mb-3">
+    <%= form.label :code, "Código", class: 'form-label' %>
+    <%= form.text_field :code, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :name, "Nombre", class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :tax_id, "TAX/RFC", class: 'form-label' %>
+    <%= form.text_field :tax_id, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :credit_limit, "Límite de Crédito", class: 'form-label' %>
+    <%= form.text_field :credit_limit, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :notes, class: 'form-label' %>
+    <%= form.text_area :notes, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.submit 'Guardar', class: 'btn btn-primary' %>
+  </div>
+<% end %>

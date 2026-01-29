@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-end mb-4">
+  <button class="btn btn-outline-primary me-2">
+    <i class="bi bi-download"></i> Exportar
+  </button>
+  <% if url_new.present? %>
+    <%= link_to url_new, class: 'btn btn-primary text-white text-decoration-none' do %>
+      <i class="bi bi-plus-circle"></i> <%= name || 'Nuevo' %>
+    <% end %>
+  <% end %>
+</div>
