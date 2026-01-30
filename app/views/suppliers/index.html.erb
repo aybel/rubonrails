@@ -18,8 +18,10 @@
       <th>Término de Pago</th>
       <th>Moneda</th>
       <th>Límite de Crédito</th>
+      <th>Ciudad / País</th>
       <th>Activo</th>
       <th>Notas</th>
+      <th>Opciones</th>
     </tr>
   </thead>
   <tbody>
@@ -35,11 +37,28 @@
         <td><%= supplier.payment_term&.name %></td>
         <td><%= supplier.currency&.code %></td>
         <td><%= number_to_currency(supplier.credit_limit, unit: supplier.currency&.symbol || "$") %></td>
+        <td><%= [supplier.city&.name, supplier.country&.name].compact.join(" / ") %></td>
         <td><%= supplier.active ? "Sí" : "No" %></td>
         <td><%= supplier.notes %></td>
+        <td>
+          <%= link_to edit_supplier_path(supplier), class: 'btn btn-sm btn-primary', title: 'Editar' do %>
+            <i class="bi bi-pencil"></i>
+          <% end %>
+          <%= link_to supplier_path(supplier), method: :delete, data: { confirm: '¿Seguro que deseas borrar este proveedor?' }, class: 'btn btn-sm btn-danger', title: 'Borrar' do %>
+            <i class="bi bi-trash"></i>
+          <% end %>
+          <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-info', title: 'Ver' do %>
+            <i class="bi bi-eye"></i>
+          <% end %>
+          <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-success', title: 'Agregar contactos' do %>
+            <i class="bi bi-person-plus"></i>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
 <%= javascript_import_module_tag "suppliers_datatable" %>

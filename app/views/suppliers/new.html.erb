@@ -1,3 +1,25 @@
+<%= javascript_import_module_tag "suppliers_create" %>
+
+<style>
+  #loading-gif-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  #loading-gif-overlay img {
+    height: 60px;
+  }
+</style>
+<div id="loading-gif-overlay">
+  <img src="/loading.gif" alt="Cargando...">
+</div>
 <%= render 'shared/titlebar', titulo: 'Nuevo Proveedor'%>
 <%= render partial: 'shared/breadcrumb', locals: { breadcrumbs: [
   { label: 'Inicio', url: root_path },
@@ -8,14 +30,27 @@
 %>
 <%= render partial: 'shared/crud_buttons', locals: { url_new: suppliers_path, name: 'Guardar' } %>
 
-<%= form_with model: @supplier, html: { class: 'needs-validation' } do |form| %>
+<div style="position:relative;">
+<%= form_with model: @supplier, html: { class: 'needs-validation', id: 'supplier-form' } do |form| %>
   <div class="mb-3">
     <%= form.label :code, "Código", class: 'form-label' %>
-    <%= form.text_field :code, class: 'form-control' %>
+    <%= form.text_field :code, class: 'form-control', style: 'width: 20%;' %>
   </div>
   <div class="mb-3">
     <%= form.label :name, "Nombre", class: 'form-label' %>
     <%= form.text_field :name, class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :supplier_type_id, "Tipo de Proveedor", class: 'form-label' %>
+    <%= form.select :supplier_type_id, options_from_collection_for_select(@supplier_types, :id, :name, @supplier.supplier_type_id), { include_blank: 'Seleccione un tipo' }, class: 'form-select' %>
+  </div>
+   <div class="mb-3">
+    <%= form.label :currency_id, "Moneda", class: 'form-label' %>
+    <%= form.select :currency_id, options_from_collection_for_select(@currency, :id, :name, @supplier.currency_id), { include_blank: 'Seleccione una moneda' }, class: 'form-select' %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :payment_term_id, "Términos de pagos", class: 'form-label' %>
+    <%= form.select :payment_term_id, options_from_collection_for_select(@payment_term, :id, :name, @supplier.payment_term_id), { include_blank: 'Seleccione el término de pago' }, class: 'form-select' %>
   </div>
   <div class="mb-3">
     <%= form.label :tax_id, "TAX/RFC", class: 'form-label' %>
@@ -25,11 +60,30 @@
     <%= form.label :credit_limit, "Límite de Crédito", class: 'form-label' %>
     <%= form.text_field :credit_limit, class: 'form-control' %>
   </div>
+   <div class="mb-3">
+    <%= form.label :country_id, "País", class: 'form-label' %>
+    <%= form.select :country_id, options_from_collection_for_select(@countries, :id, :name), { include_blank: 'Seleccione un país' }, class: 'form-select', id: 'country-select' %>
+  </div>
+
   <div class="mb-3">
-    <%= form.label :notes, class: 'form-label' %>
-    <%= form.text_area :notes, class: 'form-control' %>
+    <%= form.label :city_id, "Ciudad", class: 'form-label' %>
+    <%= form.select :city_id, [], { include_blank: 'Seleccione una ciudad' }, class: 'form-select', id: 'city-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :address, "Dirección", class: 'form-label' %>
+    <%= form.text_area :address, class: 'form-control' %>
   </div>
   <div class="mb-3">
+    <%= form.label :notes, "Notas", class: 'form-label' %>
+    <%= form.text_area :notes, class: 'form-control' %>
+  </div>
+    <div class="mb-3">
+    <%= form.label :supplier_status_id, "Estado", class: 'form-label' %>
+    <%= form.select :supplier_status_id, options_from_collection_for_select(@supplier_status, :id, :name, @supplier.supplier_status_id), { include_blank: 'Seleccione un estado' }, class: 'form-select' %>
+  </div>
+   <div class="mb-3">
     <%= form.submit 'Guardar', class: 'btn btn-primary' %>
   </div>
 <% end %>
+</div>

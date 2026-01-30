@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_28_010106) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_28_010108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cities", force: :cascade do |t|
+    t.string "name"
+    t.bigint "country_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_cities_on_country_id"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "currencies", force: :cascade do |t|
     t.string "code", limit: 3, null: false
@@ -88,18 +102,23 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_28_010106) do
     t.bigint "payment_term_id", default: 3, null: false
     t.bigint "currency_id", default: 1, null: false
     t.decimal "credit_limit", precision: 15, scale: 2, default: "0.0"
+    t.bigint "city_id"
+    t.string "address", limit: 500
     t.string "notes", limit: 500
     t.boolean "active", default: true, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_suppliers_on_city_id"
     t.index ["currency_id"], name: "index_suppliers_on_currency_id"
     t.index ["payment_term_id"], name: "index_suppliers_on_payment_term_id"
     t.index ["supplier_status_id"], name: "index_suppliers_on_supplier_status_id"
     t.index ["supplier_type_id"], name: "index_suppliers_on_supplier_type_id"
   end
 
+  add_foreign_key "cities", "countries"
   add_foreign_key "supplier_contacts", "suppliers"
+  add_foreign_key "suppliers", "cities"
   add_foreign_key "suppliers", "currencies"
   add_foreign_key "suppliers", "payment_terms"
   add_foreign_key "suppliers", "supplier_statuses"

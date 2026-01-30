@@ -1,3 +1,22 @@
+# Seeds para countries
+country_names = ["México", "Estados Unidos", "España", "Alemania", "Francia"]
+countries = country_names.map { |name| Country.find_or_create_by!(name: name) }
+
+# Seeds para cities
+city_country_map = {
+  "Ciudad de México" => "México",
+  "Monterrey" => "México",
+  "Guadalajara" => "México",
+  "Houston" => "Estados Unidos",
+  "Madrid" => "España",
+  "Barcelona" => "España",
+  "Berlín" => "Alemania",
+  "París" => "Francia"
+}
+city_country_map.each do |city, country_name|
+  country = countries.find { |c| c.name == country_name }
+  City.find_or_create_by!(name: city, country: country)
+end
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
@@ -9,60 +28,87 @@
 #   end
 
 # Seeds para catálogos
-Currency.create!([
+[
 	{ code: "USD", name: "Dólar Estadounidense", symbol: "$", exchange_rate: 1.0, is_base: false, active: true },
 	{ code: "EUR", name: "Euro", symbol: "€", exchange_rate: 1.0, is_base: false, active: true },
 	{ code: "MXN", name: "Peso Mexicano", symbol: "$", exchange_rate: 1.0, is_base: false, active: true }
-])
+].each do |attrs|
+	Currency.find_or_create_by!(code: attrs[:code]) do |c|
+		c.name = attrs[:name]
+		c.symbol = attrs[:symbol]
+		c.exchange_rate = attrs[:exchange_rate]
+		c.is_base = attrs[:is_base]
+		c.active = attrs[:active]
+	end
+end
 
-PaymentTerm.create!([
+[
 	{ code: "IMMEDIATE", name: "Pago Inmediato", days: 0, description: "Pago Inmediato", active: true },
 	{ code: "NET15", name: "Pago a 15 días", days: 15, description: "Pago a 15 días", active: true },
 	{ code: "NET30", name: "Pago a 30 días", days: 30, description: "Pago a 30 días", active: true },
 	{ code: "NET45", name: "Pago a 45 días", days: 45, description: "Pago a 45 días", active: true },
 	{ code: "NET60", name: "Pago a 60 días", days: 60, description: "Pago a 60 días", active: true },
 	{ code: "NET90", name: "Pago a 90 días", days: 90, description: "Pago a 90 días", active: true }
-])
+].each do |attrs|
+	PaymentTerm.find_or_create_by!(code: attrs[:code]) do |pt|
+		pt.name = attrs[:name]
+		pt.days = attrs[:days]
+		pt.description = attrs[:description]
+		pt.active = attrs[:active]
+	end
+end
 
-SupplierType.create!([
+[
 	{ code: "RAW_MAT", name: "Materia Prima", description: "Proveedores de insumos directos para producción.", active: true },
 	{ code: "PACK", name: "Empaque", description: "Proveedores de materiales para embalaje y empaque.", active: true },
 	{ code: "CHEM", name: "Químicos", description: "Proveedores de productos químicos para el proceso.", active: true },
 	{ code: "SERV", name: "Servicios", description: "Proveedores de servicios como mantenimiento, logística, etc.", active: true },
 	{ code: "EQUIP", name: "Equipamiento y Repuestos", description: "Proveedores de maquinaria, equipos y refacciones.", active: true },
 	{ code: "INDIRECT", name: "Indirectos", description: "Proveedores de bienes y servicios no relacionados directamente con la producción (ej. oficina).", active: true }
-])
+].each do |attrs|
+	SupplierType.find_or_create_by!(code: attrs[:code]) do |st|
+		st.name = attrs[:name]
+		st.description = attrs[:description]
+		st.active = attrs[:active]
+	end
+end
 
-SupplierStatus.create!([
+[
 	{ code: "ACTIVE", name: "Activo", description: "Proveedor aprobado y operativo.", active: true },
 	{ code: "SUSPENDED", name: "Suspendido", description: "Proveedor temporalmente inhabilitado para nuevas órdenes.", active: true },
 	{ code: "INACTIVE", name: "Inactivo", description: "Proveedor que ya no forma parte de la cadena de suministro.", active: true },
 	{ code: "EVALUATING", name: "En Evaluación", description: "Proveedor potencial en proceso de calificación.", active: true },
 	{ code: "REJECTED", name: "Rechazado", description: "Proveedor que no cumplió con los criterios de calificación.", active: true }
-])
+].each do |attrs|
+	SupplierStatus.find_or_create_by!(code: attrs[:code]) do |ss|
+		ss.name = attrs[:name]
+		ss.description = attrs[:description]
+		ss.active = attrs[:active]
+	end
+end
 
 # Seeds para suppliers (sin primary_contact_id)
 suppliers_seed = [
-	{ code: "SUP-001", name: "Celulosa Internacional S.A.", tax_id: "RFC-CEL-001", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.95, delivery_score: 0.92, payment_term_id: 4, currency_id: 1, credit_limit: 500000.00, notes: "Proveedor principal de celulosa kraft blanqueada", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-002", name: "Pulpa y Fibras del Norte", tax_id: "RFC-PFN-002", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.88, delivery_score: 0.90, payment_term_id: 3, currency_id: 3, credit_limit: 300000.00, notes: "Proveedor regional de pulpa mecánica", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-003", name: "Reciclados Papel Verde", tax_id: "RFC-RPV-003", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.82, delivery_score: 0.85, payment_term_id: 2, currency_id: 3, credit_limit: 150000.00, notes: "Especialista en papel reciclado de alta calidad", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-004", name: "Fibras Naturales Europeas", tax_id: "VAT-FNE-004", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.97, delivery_score: 0.88, payment_term_id: 5, currency_id: 2, credit_limit: 750000.00, notes: "Proveedor premium de celulosa de eucalipto", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-005", name: "Empaques Industriales SA", tax_id: "RFC-EIS-005", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.91, delivery_score: 0.94, payment_term_id: 3, currency_id: 3, credit_limit: 100000.00, notes: "Proveedor de cajas corrugadas y tarimas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-006", name: "Plásticos y Embalajes del Pacífico", tax_id: "RFC-PEP-006", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.89, delivery_score: 0.91, payment_term_id: 3, currency_id: 1, credit_limit: 80000.00, notes: "Especialista en film stretch y plásticos industriales", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-007", name: "Químicos Industriales Global", tax_id: "RFC-QIG-007", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.96, delivery_score: 0.93, payment_term_id: 4, currency_id: 1, credit_limit: 400000.00, notes: "Proveedor de blanqueadores y agentes de reforzamiento", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-008", name: "Aditivos y Colorantes Especializados", tax_id: "RFC-ACE-008", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.94, delivery_score: 0.89, payment_term_id: 3, currency_id: 1, credit_limit: 250000.00, notes: "Colorantes y aditivos para papel tissue y cartón", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-009", name: "Tratamientos Químicos del Centro", tax_id: "RFC-TQC-009", supplier_type_id: 3, supplier_status_id: 2, quality_score: 0.72, delivery_score: 0.68, payment_term_id: 2, currency_id: 3, credit_limit: 50000.00, notes: "Proveedor suspendido por problemas de calidad", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-010", name: "Transportes y Logística Express", tax_id: "RFC-TLE-010", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.92, delivery_score: 0.96, payment_term_id: 3, currency_id: 3, credit_limit: 200000.00, notes: "Transporte especializado en materiales químicos", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-011", name: "Mantenimiento Industrial Profesional", tax_id: "RFC-MIP-011", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.87, delivery_score: 0.90, payment_term_id: 2, currency_id: 3, credit_limit: 100000.00, notes: "Mantenimiento preventivo y correctivo de maquinaria", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-012", name: "Consultoría Ambiental Sostenible", tax_id: "RFC-CAS-012", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.93, delivery_score: 0.88, payment_term_id: 4, currency_id: 1, credit_limit: 150000.00, notes: "Certificaciones ambientales y tratamiento de aguas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-013", name: "Maquinaria Papelera Internacional", tax_id: "RFC-MPI-013", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.98, delivery_score: 0.85, payment_term_id: 6, currency_id: 2, credit_limit: 2000000.00, notes: "Equipos de producción y máquinas papeleras Voith", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-014", name: "Repuestos y Refacciones Técnicas", tax_id: "RFC-RRT-014", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.90, delivery_score: 0.92, payment_term_id: 4, currency_id: 1, credit_limit: 500000.00, notes: "Repuestos originales y genéricos para maquinaria", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-015", name: "Instrumentación y Control Automatizado", tax_id: "RFC-ICA-015", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.95, delivery_score: 0.87, payment_term_id: 5, currency_id: 1, credit_limit: 800000.00, notes: "Sistemas SCADA y sensores industriales", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-016", name: "Almidones y Adhesivos Naturales", tax_id: "RFC-AAN-016", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.86, delivery_score: 0.91, payment_term_id: 3, currency_id: 3, credit_limit: 120000.00, notes: "Almidones modificados y adhesivos biodegradables", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-017", name: "Energía y Combustibles Industriales", tax_id: "RFC-ECI-017", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.89, delivery_score: 0.95, payment_term_id: 2, currency_id: 3, credit_limit: 600000.00, notes: "Gas natural y combustibles para calderas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-018", name: "Bobinas y Rollos Premium", tax_id: "RFC-BRP-018", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.92, delivery_score: 0.93, payment_term_id: 3, currency_id: 1, credit_limit: 180000.00, notes: "Bobinas industriales y cores de cartón", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-019", name: "Laboratorio de Análisis de Calidad", tax_id: "RFC-LAC-019", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.97, delivery_score: 0.89, payment_term_id: 3, currency_id: 3, credit_limit: 80000.00, notes: "Análisis físico-químicos y certificaciones", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil },
-	{ code: "SUP-020", name: "Fibras Sintéticas Avanzadas", tax_id: "RFC-FSA-020", supplier_type_id: 1, supplier_status_id: 3, quality_score: 0.65, delivery_score: 0.70, payment_term_id: 1, currency_id: 1, credit_limit: nil, notes: "Proveedor inactivo - pendiente de reactivación", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil }
+	{ code: "SUP-001", name: "Celulosa Internacional S.A.", tax_id: "RFC-CEL-001", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.95, delivery_score: 0.92, payment_term_id: 4, currency_id: 1, credit_limit: 500000.00, notes: "Proveedor principal de celulosa kraft blanqueada", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Ciudad de México")&.id, address: "Av. Reforma 123, Ciudad de México" },
+	{ code: "SUP-002", name: "Pulpa y Fibras del Norte", tax_id: "RFC-PFN-002", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.88, delivery_score: 0.90, payment_term_id: 3, currency_id: 3, credit_limit: 300000.00, notes: "Proveedor regional de pulpa mecánica", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Monterrey")&.id, address: "Calle Industrial 456, Monterrey" },
+	{ code: "SUP-003", name: "Reciclados Papel Verde", tax_id: "RFC-RPV-003", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.82, delivery_score: 0.85, payment_term_id: 2, currency_id: 3, credit_limit: 150000.00, notes: "Especialista en papel reciclado de alta calidad", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Guadalajara")&.id, address: "Av. Juárez 789, Guadalajara" },
+	{ code: "SUP-004", name: "Fibras Naturales Europeas", tax_id: "VAT-FNE-004", supplier_type_id: 1, supplier_status_id: 1, quality_score: 0.97, delivery_score: 0.88, payment_term_id: 5, currency_id: 2, credit_limit: 750000.00, notes: "Proveedor premium de celulosa de eucalipto", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Madrid")&.id, address: "Calle Mayor 1, Madrid" },
+	{ code: "SUP-005", name: "Empaques Industriales SA", tax_id: "RFC-EIS-005", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.91, delivery_score: 0.94, payment_term_id: 3, currency_id: 3, credit_limit: 100000.00, notes: "Proveedor de cajas corrugadas y tarimas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Houston")&.id, address: "Warehouse Rd 22, Houston" },
+	{ code: "SUP-006", name: "Plásticos y Embalajes del Pacífico", tax_id: "RFC-PEP-006", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.89, delivery_score: 0.91, payment_term_id: 3, currency_id: 1, credit_limit: 80000.00, notes: "Especialista en film stretch y plásticos industriales", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Ciudad de México")&.id, address: "Zona Industrial 55, Ciudad de México" },
+	{ code: "SUP-007", name: "Químicos Industriales Global", tax_id: "RFC-QIG-007", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.96, delivery_score: 0.93, payment_term_id: 4, currency_id: 1, credit_limit: 400000.00, notes: "Proveedor de blanqueadores y agentes de reforzamiento", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Houston")&.id, address: "Chemical Park 100, Houston" },
+	{ code: "SUP-008", name: "Aditivos y Colorantes Especializados", tax_id: "RFC-ACE-008", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.94, delivery_score: 0.89, payment_term_id: 3, currency_id: 1, credit_limit: 250000.00, notes: "Colorantes y aditivos para papel tissue y cartón", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Barcelona")&.id, address: "Av. Diagonal 200, Barcelona" },
+	{ code: "SUP-009", name: "Tratamientos Químicos del Centro", tax_id: "RFC-TQC-009", supplier_type_id: 3, supplier_status_id: 2, quality_score: 0.72, delivery_score: 0.68, payment_term_id: 2, currency_id: 3, credit_limit: 50000.00, notes: "Proveedor suspendido por problemas de calidad", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Ciudad de México")&.id, address: "Calle Reforma 321, Ciudad de México" },
+	{ code: "SUP-010", name: "Transportes y Logística Express", tax_id: "RFC-TLE-010", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.92, delivery_score: 0.96, payment_term_id: 3, currency_id: 3, credit_limit: 200000.00, notes: "Transporte especializado en materiales químicos", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Monterrey")&.id, address: "Av. Transporte 88, Monterrey" },
+	{ code: "SUP-011", name: "Mantenimiento Industrial Profesional", tax_id: "RFC-MIP-011", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.87, delivery_score: 0.90, payment_term_id: 2, currency_id: 3, credit_limit: 100000.00, notes: "Mantenimiento preventivo y correctivo de maquinaria", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Guadalajara")&.id, address: "Calle Maquinaria 12, Guadalajara" },
+	{ code: "SUP-012", name: "Consultoría Ambiental Sostenible", tax_id: "RFC-CAS-012", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.93, delivery_score: 0.88, payment_term_id: 4, currency_id: 1, credit_limit: 150000.00, notes: "Certificaciones ambientales y tratamiento de aguas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "París")&.id, address: "Rue de l'Environnement 5, París" },
+	{ code: "SUP-013", name: "Maquinaria Papelera Internacional", tax_id: "RFC-MPI-013", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.98, delivery_score: 0.85, payment_term_id: 6, currency_id: 2, credit_limit: 2000000.00, notes: "Equipos de producción y máquinas papeleras Voith", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Berlín")&.id, address: "Industriestrasse 10, Berlín" },
+	{ code: "SUP-014", name: "Repuestos y Refacciones Técnicas", tax_id: "RFC-RRT-014", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.90, delivery_score: 0.92, payment_term_id: 4, currency_id: 1, credit_limit: 500000.00, notes: "Repuestos originales y genéricos para maquinaria", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Madrid")&.id, address: "Calle Refacciones 77, Madrid" },
+	{ code: "SUP-015", name: "Instrumentación y Control Automatizado", tax_id: "RFC-ICA-015", supplier_type_id: 5, supplier_status_id: 1, quality_score: 0.95, delivery_score: 0.87, payment_term_id: 5, currency_id: 1, credit_limit: 800000.00, notes: "Sistemas SCADA y sensores industriales", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Houston")&.id, address: "Automation Blvd 9, Houston" },
+	{ code: "SUP-016", name: "Almidones y Adhesivos Naturales", tax_id: "RFC-AAN-016", supplier_type_id: 3, supplier_status_id: 1, quality_score: 0.86, delivery_score: 0.91, payment_term_id: 3, currency_id: 3, credit_limit: 120000.00, notes: "Almidones modificados y adhesivos biodegradables", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Guadalajara")&.id, address: "Av. Adhesivos 33, Guadalajara" },
+	{ code: "SUP-017", name: "Energía y Combustibles Industriales", tax_id: "RFC-ECI-017", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.89, delivery_score: 0.95, payment_term_id: 2, currency_id: 3, credit_limit: 600000.00, notes: "Gas natural y combustibles para calderas", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Monterrey")&.id, address: "Calle Energía 101, Monterrey" },
+	{ code: "SUP-018", name: "Bobinas y Rollos Premium", tax_id: "RFC-BRP-018", supplier_type_id: 2, supplier_status_id: 1, quality_score: 0.92, delivery_score: 0.93, payment_term_id: 3, currency_id: 1, credit_limit: 180000.00, notes: "Bobinas industriales y cores de cartón", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Ciudad de México")&.id, address: "Zona Bobinas 2, Ciudad de México" },
+	{ code: "SUP-019", name: "Laboratorio de Análisis de Calidad", tax_id: "RFC-LAC-019", supplier_type_id: 4, supplier_status_id: 1, quality_score: 0.97, delivery_score: 0.89, payment_term_id: 3, currency_id: 3, credit_limit: 80000.00, notes: "Análisis físico-químicos y certificaciones", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "París")&.id, address: "Rue de la Qualité 8, París" },
+	{ code: "SUP-020", name: "Fibras Sintéticas Avanzadas", tax_id: "RFC-FSA-020", supplier_type_id: 1, supplier_status_id: 3, quality_score: 0.65, delivery_score: 0.70, payment_term_id: 1, currency_id: 1, credit_limit: nil, notes: "Proveedor inactivo - pendiente de reactivación", active: true, created_at: "2026-01-22 16:45:15", updated_at: "2026-01-22 16:45:15", deleted_at: nil, city_id: City.find_by(name: "Berlín")&.id, address: "Fabrikstrasse 5, Berlín" }
 ]
 
 suppliers = Supplier.create!(suppliers_seed)
