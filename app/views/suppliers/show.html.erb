@@ -1,0 +1,209 @@
+<%= render 'shared/titlebar', titulo: 'Proveedor'%>
+<%= render partial: 'shared/breadcrumb', locals: { breadcrumbs: [
+  { label: 'Inicio', url: root_path },
+  { label: 'Administración', url: root_path },
+  { label: 'Proveedores', url: suppliers_path },
+  { label: 'Proveedor' }
+] }
+%>
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar con información clave -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <div class="avatar-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center rounded-circle" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-building fs-1 text-primary"></i>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mb-1"><%= @supplier.name %></h4>
+                    <p class="text-muted mb-3">#<%= @supplier.code %></p>
+                    
+                    <div class="d-grid gap-2 mb-4">
+                        <button class="btn btn-primary">
+                            <i class="bi bi-telephone me-2"></i> Contactar
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="bi bi-file-earmark-text me-2"></i> Generar Reporte
+                        </button>
+                    </div>
+                    
+                    <!-- Status Cards -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="card border">
+                                <div class="card-body py-2 text-center">
+                                    <div class="text-success fw-bold"><%= @supplier.quality_score || 0 %>/5</div>
+                                    <small class="text-muted">Calidad</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card border">
+                                <div class="card-body py-2 text-center">
+                                    <div class="text-success fw-bold"><%= @supplier.delivery_score || 0 %>/5</div>
+                                    <small class="text-muted">Entrega</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información rápida -->
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Estado</span>
+                            <span class="badge <%= @supplier.active ? 'bg-success' : 'bg-danger' %>">
+                                <%= @supplier.active ? 'Activo' : 'Inactivo' %>
+                            </span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Crédito</span>
+                            <span class="fw-bold"><%= number_with_precision(@supplier.credit_limit, precision: 2, delimiter: '.', separator: ',') %></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Moneda</span>
+                            <span><%= @supplier.currency.name if @supplier.currency %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h4 mb-0">Detalles del Proveedor</h2>
+                    <p class="text-muted mb-0">Información completa y actualizada</p>
+                </div>
+                <div class="btn-group">
+                    <a href="/suppliers/<%= @supplier.id %>/edit" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="/suppliers" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <ul class="nav nav-tabs mb-4" id="supplierTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">
+                        Información
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="financial-tab" data-bs-toggle="tab" data-bs-target="#financial" type="button">
+                        Financiera
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="location-tab" data-bs-toggle="tab" data-bs-target="#location" type="button">
+                        Ubicación
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tabs Content -->
+            <div class="tab-content" id="supplierTabsContent">
+                <!-- Información General -->
+                <div class="tab-pane fade show active" id="info" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-muted">Identificación</h6>
+                                    <table class="table table-borderless mb-0">
+                                        <tr>
+                                            <td width="40%"><strong>Código:</strong></td>
+                                            <td><%= @supplier.code %></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Tipo:</strong></td>
+                                            <td>
+                                                <span class="badge bg-info"><%= @supplier.supplier_type.name if @supplier.supplier_type %></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>RIF/Cédula:</strong></td>
+                                            <td><%= @supplier.tax_id || 'N/A' %></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-muted">Estadísticas</h6>
+                                                                        <!-- Estadística ficticia de contratos -->
+                                                                        <div class="mb-3">
+                                                                            <i class="bi bi-file-earmark-text text-info me-2"></i>
+                                                                            <strong>Contratos realizados:</strong>
+                                                                            <span class="badge bg-primary"> <%= rand(3..12) %> </span>
+                                                                        </div>
+                                                                        <div class="progress" style="height: 20px;">
+                                                                            <div class="progress-bar bg-success" role="progressbar" style="width: <%= rand(30..100) %>%" aria-valuenow="<%= rand(30..100) %>" aria-valuemin="0" aria-valuemax="100">
+                                                                                <%= rand(30..100) %>% completados
+                                                                            </div>
+                                                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Financiera -->
+                <div class="tab-pane fade" id="financial" role="tabpanel">
+                    <!-- Contenido similar al anterior pero organizado por pestañas -->
+                    <table class="table table-borderless">
+                        <tr>
+                            <td width="40%"><strong>Término de Pago:</strong></td>
+                            <td><%= @supplier.payment_term.name if @supplier.payment_term %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Moneda:</strong></td>
+                            <td><%= @supplier.currency.name if @supplier.currency %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Límite de Crédito:</strong></td>
+                            <td><%= number_with_precision(@supplier.credit_limit, precision: 2, delimiter: '.', separator: ',') %></td>
+                        </tr>
+                    </table>
+                      <!-- tabla con la lista de contratos y facturas -->
+                </div>
+
+                <!-- Ubicación -->
+                <div class="tab-pane fade" id="location" role="tabpanel">
+                                        <!-- Mejorada: Información de ubicación -->
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-3 text-muted">Ubicación</h6>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span><i class="bi bi-geo-alt-fill me-2 text-primary"></i>Ciudad</span>
+                                                        <span><%= @supplier.city&.name || 'N/A' %></span>
+                                                    </li>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span><i class="bi bi-flag-fill me-2 text-success"></i>País</span>
+                                                        <span><%= @supplier.country&.name || 'N/A' %></span>
+                                                    </li>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span><i class="bi bi-house-door-fill me-2 text-secondary"></i>Dirección</span>
+                                                        <span><%= @supplier.address.presence || 'N/A' %></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

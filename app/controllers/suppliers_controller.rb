@@ -49,4 +49,11 @@ class SuppliersController < ApplicationController
     @supplier.destroy
     redirect_to suppliers_path, notice: 'Proveedor fue eliminado correctamente.'
   end
+
+  def show
+    @supplier = Supplier.includes(:currency, :payment_term, :supplier_type, :supplier_status, :city).find(params[:id])
+    @supplier_contacts = @supplier.supplier_contacts.order(:id)
+    #Rails.logger.info "Supplier data: #{@supplier.attributes.inspect}"
+    #Rails.logger.info "Supplier associations: currency=#{@supplier.currency.inspect}, payment_term=#{@supplier.payment_term.inspect}, supplier_type=#{@supplier.supplier_type.inspect}, supplier_status=#{@supplier.supplier_status.inspect}, city=#{@supplier.city.inspect}"
+  end
 end
