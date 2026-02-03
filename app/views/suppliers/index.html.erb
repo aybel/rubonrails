@@ -44,13 +44,13 @@
           <%= link_to edit_supplier_path(supplier), class: 'btn btn-sm btn-primary', title: 'Editar' do %>
             <i class="bi bi-pencil"></i>
           <% end %>
-          <%= link_to supplier_path(supplier), method: :delete, data: { confirm: '¿Seguro que deseas borrar este proveedor?' }, class: 'btn btn-sm btn-danger', title: 'Borrar' do %>
+          <%= link_to destroy_supplier_path(supplier), method: :delete, data: { confirm: '¿Seguro que deseas borrar este proveedor?' }, class: 'btn btn-sm btn-danger', title: 'Borrar' do %>
             <i class="bi bi-trash"></i>
           <% end %>
           <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-info', title: 'Ver' do %>
             <i class="bi bi-eye"></i>
           <% end %>
-          <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-success', title: 'Agregar contactos' do %>
+          <%= link_to new_supplier_contact_path(supplier), class: 'btn btn-sm btn-success', title: 'Agregar contactos' do %>
             <i class="bi bi-person-plus"></i>
           <% end %>
         </td>
