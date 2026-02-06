@@ -24,20 +24,25 @@ class SuppliersController < ApplicationController
   end
   
   private def supplier_params
-    params.require(:supplier).permit(:code, :name, :tax_id, :credit_limit, :notes, :supplier_type_id, :currency_id , :payment_term_id, :supplier_status_id, :city_id, :address)
+    params.require(:supplier).permit(:code, :name, :tax_id, :credit_limit, :notes, :supplier_type_id, :currency_id , :payment_term_id, :supplier_status_id, :city_id, :address, :country_id)
   end
 
   def edit
-    @supplier = Supplier.find(params[:id])
+    @supplier = Supplier.includes(city: :country).find(params[:id])
+    #Logger.new(STDOUT).info("Edicion de proveedor : #{@supplier.city.country_id}, ciudad: #{@supplier.city_id}")
+    #Rails.logger.debug("Datos del proveedor: #{@supplier.city.country_id}, ciudad: #{@supplier.city_id}")
     @supplier_types =SupplierType.where(active: true)
     @currency = Currency.where(active: true)
     @supplier_status = SupplierStatus.where(active: true)
     @payment_term = PaymentTerm.where(active: true)
     @countries = Country.all.order(:name)
+    @cities = City.where(country_id: @supplier.city.country.id).order(:name)
   end
   def update
     @supplier = Supplier.find(params[:id])
-    if @supplier.update(supplier_params)
+    params_to_update = supplier_params.except(:id, 'id', :country_id, 'country_id')
+    Rails.logger.debug("Datos del proveedor a editar: #{params_to_update}")
+    if @supplier.update(params_to_update)
       redirect_to suppliers_path, notice: 'Proveedor fue actualizado correctamente.'
     else
       render :edit, status: :unprocessable_entity

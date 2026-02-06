@@ -5,6 +5,18 @@
   { label: 'Proveedores' }
 ] } %>
 <%= render partial: 'shared/crud_buttons', locals: { name: 'Nuevo Proveedor', url_new: new_supplier_path } %>
+<% if flash[:notice] %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: '<%= j flash[:notice] %>',
+        confirmButtonText: 'OK'
+      });
+    });
+  </script>
+<% end %>
 <table id="suppliers-table" class="table ">
   <thead>
     <tr>
@@ -44,13 +56,13 @@
           <%= link_to edit_supplier_path(supplier), class: 'btn btn-sm btn-primary', title: 'Editar' do %>
             <i class="bi bi-pencil"></i>
           <% end %>
-          <%= link_to destroy_supplier_path(supplier), method: :delete, data: { confirm: '¿Seguro que deseas borrar este proveedor?' }, class: 'btn btn-sm btn-danger', title: 'Borrar' do %>
+          <%= link_to supplier_path(supplier), method: :delete, data: { confirm: '¿Seguro que deseas borrar este proveedor?' }, class: 'btn btn-sm btn-danger', title: 'Borrar' do %>
             <i class="bi bi-trash"></i>
           <% end %>
           <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-info', title: 'Ver' do %>
             <i class="bi bi-eye"></i>
           <% end %>
-          <%= link_to new_supplier_contact_path(supplier), class: 'btn btn-sm btn-success', title: 'Agregar contactos' do %>
+          <%= link_to supplier_path(supplier), class: 'btn btn-sm btn-success', title: 'Agregar contactos' do %>
             <i class="bi bi-person-plus"></i>
           <% end %>
         </td>
@@ -58,7 +70,5 @@
     <% end %>
   </tbody>
 </table>
-<% if flash[:notice] %>
-  <div class="alert alert-success"><%= flash[:notice] %></div>
-<% end %>
+
 <%= javascript_import_module_tag "suppliers_datatable" %>
